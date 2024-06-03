@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.autobots.automanager.entitades.Empresa;
+import com.autobots.automanager.entidades.Empresa;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 
 @RestController

@@ -1,4 +1,4 @@
-package com.autobots.automanager.entitades;
+package com.autobots.automanager.entidades;
 
 import java.util.Date;
 
@@ -7,22 +7,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 
 import lombok.Data;
 
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Credencial {
-	@Id()
+public class Mercadoria {
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
-	private Date criacao;
-	@Column()
-	private Date ultimoAcesso;
+	private Date validade;
 	@Column(nullable = false)
-	private boolean inativo;
+	private Date fabricao;
+	@Column(nullable = false)
+	private Date cadastro;
+	@Column(nullable = false)
+	private String nome;
+	@Column(nullable = false)
+	private long quantidade;
+	@Column(nullable = false)
+	private double valor;
+	@Column()
+	private String descricao;
 }
