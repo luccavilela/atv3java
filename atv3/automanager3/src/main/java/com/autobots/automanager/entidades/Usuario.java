@@ -25,7 +25,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = { "mercadorias", "vendas", "veiculos" })
+@EqualsAndHashCode(exclude = { "mercadorias", "vendas", "veiculos" }, callSuper = false)
 @Entity
 public class Usuario extends RepresentationModel<Usuario>{
 	@Id
