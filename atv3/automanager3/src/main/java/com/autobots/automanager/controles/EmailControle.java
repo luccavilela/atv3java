@@ -38,7 +38,7 @@ public class EmailControle {
 	        Email email = repositorioEmail.findById(emailId).orElseThrow(() -> new EntityNotFoundException("Email não encontrado"));  
 	        adicionadorLink.adicionarLink(email);
 	        
-	        return new ResponseEntity<>(email, HttpStatus.OK);
+	        return new ResponseEntity<>(email, HttpStatus.FOUND);
 	    } catch (EntityNotFoundException | NoSuchElementException e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    } catch (Exception e) {

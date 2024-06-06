@@ -25,7 +25,7 @@ public class EmpresaControle {
         if (empresas.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(empresas, HttpStatus.OK);
+            return new ResponseEntity<>(empresas, HttpStatus.FOUND);
         }
     }
 }

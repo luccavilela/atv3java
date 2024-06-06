@@ -11,4 +11,8 @@ public class StringVerificadorNulo {
 		}
 		return nulo;
 	}
+	
+	public boolean verificar(Double valor) {
+		return valor == null;
+	}
 }

@@ -57,7 +57,7 @@ public class TelefoneControle {
 	    	Telefone telefone = repositorioTelefone.findById(telefoneId).orElseThrow(() -> new EntityNotFoundException("Telefone não encontrado"));  
 	    	adicionadorLink.adicionarLink(telefone);
 	    	
-	    	return new ResponseEntity<>(telefone, HttpStatus.OK);
+	    	return new ResponseEntity<>(telefone, HttpStatus.FOUND);
 		} catch (EntityNotFoundException e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    } catch (Exception e) {

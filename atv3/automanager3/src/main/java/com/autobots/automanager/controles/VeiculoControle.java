@@ -38,7 +38,7 @@ public class VeiculoControle {
 	        Veiculo veiculo = repositorioVeiculo.findById(veiculoId).orElseThrow(() -> new EntityNotFoundException("Veiculo não encontrado"));  
 	        adicionadorLink.adicionarLink(veiculo);
 	        
-	        return new ResponseEntity<>(veiculo, HttpStatus.OK);
+	        return new ResponseEntity<>(veiculo, HttpStatus.FOUND);
 	    } catch (EntityNotFoundException | NoSuchElementException e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    } catch (Exception e) {

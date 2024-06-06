@@ -37,7 +37,7 @@ public class EnderecoControle {
 	        Endereco endereco = repositorioEndereco.findById(enderecoId).orElseThrow(() -> new EntityNotFoundException("Endereco não encontrado"));  
 	        adicionadorLink.adicionarLink(endereco);
 	        
-	        return new ResponseEntity<>(endereco, HttpStatus.OK);
+	        return new ResponseEntity<>(endereco, HttpStatus.FOUND);
 	    } catch (EntityNotFoundException | NoSuchElementException e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    } catch (Exception e) {

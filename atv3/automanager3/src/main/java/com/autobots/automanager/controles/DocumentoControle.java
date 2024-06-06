@@ -57,7 +57,7 @@ public class DocumentoControle {
 	        Documento documento = repositorioDocumento.findById(documentoId).orElseThrow(() -> new EntityNotFoundException("Documento não encontrado"));  
 	        adicionadorLink.adicionarLink(documento);
 	        
-	        return new ResponseEntity<>(documento, HttpStatus.OK);
+	        return new ResponseEntity<>(documento, HttpStatus.FOUND);
 	    } catch (EntityNotFoundException | NoSuchElementException e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    } catch (Exception e) {

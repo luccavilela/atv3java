@@ -18,11 +18,14 @@ import org.springframework.hateoas.RepresentationModel;
 import com.autobots.automanager.enumeracoes.TipoVeiculo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(exclude = { "proprietario", "vendas" })
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = { "proprietario", "vendas" }, callSuper = false)
 @Entity
 public class Veiculo extends RepresentationModel<Veiculo>{
 	@Id
