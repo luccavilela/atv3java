@@ -1,5 +1,7 @@
 package com.autobots.automanager.modelos.outros;
 
+import java.util.Date;
+
 public class StringVerificadorNulo {
 
 	public boolean verificar(String dado) {
@@ -15,4 +17,12 @@ public class StringVerificadorNulo {
 	public boolean verificar(Double valor) {
 		return valor == null;
 	}
+	
+	public boolean verificar(Date data) {
+        return data == null;
+    }
+	
+	public boolean verificar(Long valor) {
+        return valor == null;
+    }
 }
