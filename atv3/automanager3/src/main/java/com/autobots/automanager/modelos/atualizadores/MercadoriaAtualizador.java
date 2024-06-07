@@ -1,5 +1,7 @@
 package com.autobots.automanager.modelos.atualizadores;
 
+import java.util.Set;
+
 import com.autobots.automanager.entidades.Mercadoria;
 import com.autobots.automanager.modelos.outros.StringVerificadorNulo;
 
@@ -40,5 +42,17 @@ private StringVerificadorNulo verificador = new StringVerificadorNulo();
 			
 		}
 		
+	}
+	
+	public void atualizar(Set<Mercadoria> mercadorias, Set<Mercadoria> atualizacoes) {
+		for (Mercadoria atualizacao : atualizacoes) {
+			for (Mercadoria mercadoria : mercadorias) {
+				if (atualizacao.getId() != null) {
+					if (atualizacao.getId() == mercadoria.getId()) {
+						atualizar(mercadoria, atualizacao);
+					}
+				}
+			}
+		}
 	}
 }

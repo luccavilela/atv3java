@@ -1,5 +1,7 @@
 package com.autobots.automanager.modelos.atualizadores;
 
+import java.util.Set;
+
 import com.autobots.automanager.entidades.Servico;
 import com.autobots.automanager.modelos.outros.StringVerificadorNulo;
 
@@ -22,6 +24,18 @@ public class ServicoAtualizador {
 			
 		}
 		
+	}
+	
+	public void atualizar(Set<Servico> servicos, Set<Servico> atualizacoes) {
+		for (Servico atualizacao : atualizacoes) {
+			for (Servico servico : servicos) {
+				if (atualizacao.getId() != null) {
+					if (atualizacao.getId() == servico.getId()) {
+						atualizar(servico, atualizacao);
+					}
+				}
+			}
+		}
 	}
 
 }

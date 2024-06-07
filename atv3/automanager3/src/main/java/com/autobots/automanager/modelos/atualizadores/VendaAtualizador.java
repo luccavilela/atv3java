@@ -10,6 +10,8 @@ public class VendaAtualizador {
 	private TelefoneAtualizador telefoneAtualizador = new TelefoneAtualizador();
 	private DocumentoAtualizador documentoAtualizador = new DocumentoAtualizador();
 	private EmailAtualizador emailAtualizador = new EmailAtualizador();
+	private MercadoriaAtualizador mercadoriaAtualizador = new MercadoriaAtualizador();
+	private ServicoAtualizador servicoAtualizador = new ServicoAtualizador();
 
 	private void atualizarDados(Venda venda, Venda atualizacao) {
 		if (!verificador.verificar(atualizacao.getIdentificacao())) {
@@ -25,6 +27,8 @@ public class VendaAtualizador {
 		telefoneAtualizador.atualizar(venda.getTelefones(), atualizacao.getTelefones());
 		documentoAtualizador.atualizar(venda.getDocumentos(), atualizacao.getDocumentos());
 		emailAtualizador.atualizar(venda.getEmails(), atualizacao.getEmails());
+		mercadoriaAtualizador.atualizar(venda.getMercadorias(), atualizacao.getMercadorias());
+		servicoAtualizador.atualizar(venda.getServicos(), atualizacao.getServicos());
 	}
 
 }
