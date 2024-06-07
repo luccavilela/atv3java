@@ -1,5 +1,7 @@
 package com.autobots.automanager.modelos.atualizadores;
 
+import java.util.Set;
+
 import com.autobots.automanager.entidades.Email;
 import com.autobots.automanager.modelos.outros.StringVerificadorNulo;
 
@@ -13,6 +15,18 @@ public class EmailAtualizador {
 			}
 		}
 		
+	}
+	
+	public void atualizar(Set<Email> emails, Set<Email> atualizacoes) {
+		for (Email atualizacao : atualizacoes) {
+			for (Email email : emails) {
+				if (atualizacao.getId() != null) {
+					if (atualizacao.getId() == email.getId()) {
+						atualizar(email, atualizacao);
+					}
+				}
+			}
+		}
 	}
 
 }
