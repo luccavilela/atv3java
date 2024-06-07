@@ -1,5 +1,7 @@
 package com.autobots.automanager.modelos.atualizadores;
 
+import java.util.Set;
+
 import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.modelos.outros.StringVerificadorNulo;
 
@@ -29,6 +31,18 @@ public class VendaAtualizador {
 		emailAtualizador.atualizar(venda.getEmails(), atualizacao.getEmails());
 		mercadoriaAtualizador.atualizar(venda.getMercadorias(), atualizacao.getMercadorias());
 		servicoAtualizador.atualizar(venda.getServicos(), atualizacao.getServicos());
+	}
+	
+	public void atualizar(Set<Venda> vendas, Set<Venda> atualizacoes) {
+		for (Venda atualizacao : atualizacoes) {
+			for (Venda venda : vendas) {
+				if (atualizacao.getId() != null) {
+					if (atualizacao.getId() == venda.getId()) {
+						atualizar(venda, atualizacao);
+					}
+				}
+			}
+		}
 	}
 
 }

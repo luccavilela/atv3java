@@ -1,5 +1,7 @@
 package com.autobots.automanager.modelos.atualizadores;
 
+import java.util.Set;
+
 import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.modelos.outros.StringVerificadorNulo;
 
@@ -23,5 +25,17 @@ public class UsuarioAtualizador {
 		enderecoAtualizador.atualizar(usuario.getEndereco(), atualizacao.getEndereco());
 		documentoAtualizador.atualizar(usuario.getDocumentos(), atualizacao.getDocumentos());
 		telefoneAtualizador.atualizar(usuario.getTelefones(), atualizacao.getTelefones());
+	}
+	
+	public void atualizar(Set<Usuario> usuarios, Set<Usuario> atualizacoes) {
+		for (Usuario atualizacao : atualizacoes) {
+			for (Usuario usuario : usuarios) {
+				if (atualizacao.getId() != null) {
+					if (atualizacao.getId() == usuario.getId()) {
+						atualizar(usuario, atualizacao);
+					}
+				}
+			}
+		}
 	}
 }
