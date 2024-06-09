@@ -37,11 +37,10 @@ public class Venda extends RepresentationModel<Venda>{
     private String identificacao;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JsonIgnore
     private Usuario cliente;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JsonIgnore
+
     private Usuario funcionario;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -57,14 +56,11 @@ public class Venda extends RepresentationModel<Venda>{
     private Set<Email> emails = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JsonIgnore
     private Set<Mercadoria> mercadorias = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JsonIgnore
     private Set<Servico> servicos = new HashSet<>();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JsonIgnore
     private Veiculo veiculo;
 }

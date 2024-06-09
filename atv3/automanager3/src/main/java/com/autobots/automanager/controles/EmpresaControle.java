@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entidades.Empresa;
+import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.modelos.atualizadores.EmpresaAtualizador;
 import com.autobots.automanager.modelos.links.AdicionadorLinkEmpresa;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
+import com.autobots.automanager.repositorios.UsuarioRepositorio;
 
 
 
@@ -31,6 +33,9 @@ public class EmpresaControle {
 	
 	@Autowired 
 	private RepositorioEmpresa empresaRepositorio;
+	
+	@Autowired
+    private UsuarioRepositorio usuarioRepositorio;
 	
 	@Autowired
 	private AdicionadorLinkEmpresa adicionadorLink;
@@ -72,6 +77,25 @@ public class EmpresaControle {
 		return new ResponseEntity<>(status);
 
 	}
+	
+	 @PostMapping("/adicionarUsuario/{empresaId}/{usuarioId}")
+	    public ResponseEntity<?> adicionarUsuarioEmpresa(@PathVariable Long empresaId, @PathVariable Long usuarioId) {
+	        try {
+	            Empresa empresa = empresaRepositorio.findById(empresaId)
+	                    .orElseThrow(() -> new NoSuchElementException("Empresa não encontrada"));
+	            Usuario usuario = usuarioRepositorio.findById(usuarioId)
+	                    .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado"));
+
+	            empresa.getUsuarios().add(usuario);
+	            empresaRepositorio.save(empresa);
+
+	            return new ResponseEntity<>(HttpStatus.OK);
+	        } catch (NoSuchElementException e) {
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	        } catch (Exception e) {
+	            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
+	    }
 	
 	@PutMapping("/atualizar/{empresaId}")
     public ResponseEntity<?> atualizarEmpresa(@PathVariable Long empresaId, @RequestBody Empresa novaEmpresa) {
