@@ -40,7 +40,7 @@ public class Venda extends RepresentationModel<Venda>{
     private Usuario cliente;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-
+    @JsonIgnore
     private Usuario funcionario;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -17,16 +17,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.entidades.Veiculo;
+import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.modelos.atualizadores.VeiculoAtualizador;
 import com.autobots.automanager.modelos.links.AdicionadorLinkVeiculo;
+import com.autobots.automanager.repositorios.UsuarioRepositorio;
 import com.autobots.automanager.repositorios.VeiculoRepositorio;
+import com.autobots.automanager.repositorios.VendaRepositorio;
 
 @RestController
 @RequestMapping("/veiculo")
 public class VeiculoControle {
 	@Autowired
 	VeiculoRepositorio repositorioVeiculo;
+	@Autowired
+	private VendaRepositorio repositorioVenda;
+	@Autowired
+	private UsuarioRepositorio repositorioUsuario;
 	
 	@Autowired
 	private AdicionadorLinkVeiculo adicionadorLink;
@@ -92,13 +100,28 @@ public class VeiculoControle {
 	
 	@DeleteMapping("/excluir/{veiculoId}")
 	public ResponseEntity<?> excluirVeiculo(@PathVariable Long veiculoId) {
-	    HttpStatus status = HttpStatus.BAD_REQUEST;
-	    Veiculo veiculo = repositorioVeiculo.getById(veiculoId);
-	    if (veiculo != null) {
-	        repositorioVeiculo.delete(veiculo);
-	        status = HttpStatus.OK;
-	    }
-	    return new ResponseEntity<>(status);
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		Veiculo veiculo = repositorioVeiculo.getById(veiculoId);
+		if (veiculo != null) {
+			List<Venda> vendas = repositorioVenda.findAll();
+			for (Venda venda : vendas) {
+				if (venda.getVeiculo() != null && venda.getVeiculo().getId().equals(veiculoId)) {
+					venda.setVeiculo(null);
+					repositorioVenda.save(venda);
+				}
+			}
+
+			List<Usuario> usuarios = repositorioUsuario.findAll();
+			for (Usuario usuario : usuarios) {
+				if (usuario.getVeiculos().contains(veiculo)) {
+					usuario.getVeiculos().remove(veiculo);
+					repositorioUsuario.save(usuario);
+				}
+			}
+			repositorioVeiculo.deleteById(veiculoId);
+			status = HttpStatus.OK;
+		}
+		return new ResponseEntity<>(status);
 	}
 
 }

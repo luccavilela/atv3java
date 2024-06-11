@@ -17,10 +17,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autobots.automanager.entidades.Empresa;
 import com.autobots.automanager.entidades.Servico;
+import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.modelos.atualizadores.ServicoAtualizador;
 import com.autobots.automanager.modelos.links.AdicionadorLinkServico;
+import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.ServicoRepositorio;
+import com.autobots.automanager.repositorios.VendaRepositorio;
 
 @RestController
 @RequestMapping("/servico")
@@ -28,6 +32,12 @@ public class ServicoControle {
 	
 	@Autowired 
 	private ServicoRepositorio repositorioServico;
+	
+	@Autowired
+	private VendaRepositorio repositorioVenda;
+	
+	@Autowired
+	private RepositorioEmpresa repositorioEmpresa;
 	
 	@Autowired
 	private AdicionadorLinkServico adicionadorLink;
@@ -93,7 +103,23 @@ public class ServicoControle {
 	    HttpStatus status = HttpStatus.BAD_REQUEST;
 	    Servico servico = repositorioServico.getById(servicoId);
 	    if (servico != null) {
-	        repositorioServico.delete(servico);
+	        List<Venda> vendas = repositorioVenda.findAll();
+	        for (Venda venda : vendas) {
+	            if (venda.getServicos().contains(servico)) {
+	                venda.getServicos().remove(servico);
+	                repositorioVenda.save(venda);
+	            }
+	        }
+	        
+	        List<Empresa> empresas = repositorioEmpresa.findAll();
+	        for (Empresa empresa : empresas) {
+	            if (empresa.getServicos().contains(servico)) {
+	                empresa.getServicos().remove(servico);
+	                repositorioEmpresa.save(empresa);
+	            }
+	        }
+	        
+	        repositorioServico.deleteById(servicoId);
 	        status = HttpStatus.OK;
 	    }
 	    return new ResponseEntity<>(status);

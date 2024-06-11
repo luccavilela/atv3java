@@ -17,10 +17,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autobots.automanager.entidades.Empresa;
 import com.autobots.automanager.entidades.Mercadoria;
+import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.modelos.atualizadores.MercadoriaAtualizador;
 import com.autobots.automanager.modelos.links.AdicionadorLinkMercadoria;
 import com.autobots.automanager.repositorios.MercadoriaRepositorio;
+import com.autobots.automanager.repositorios.RepositorioEmpresa;
+import com.autobots.automanager.repositorios.UsuarioRepositorio;
+import com.autobots.automanager.repositorios.VendaRepositorio;
 
 
 @RestController
@@ -29,6 +35,15 @@ public class MercadoriaControle {
 	
 	@Autowired 
 	private MercadoriaRepositorio repositorioMercadoria;
+	
+	@Autowired
+	private UsuarioRepositorio repositorioUsuario;
+	
+	@Autowired
+	private VendaRepositorio repositorioVenda;
+	
+	@Autowired
+	private RepositorioEmpresa repositorioEmpresa;
 	
 	@Autowired
 	private AdicionadorLinkMercadoria adicionadorLink;
@@ -94,7 +109,31 @@ public class MercadoriaControle {
 	    HttpStatus status = HttpStatus.BAD_REQUEST;
 	    Mercadoria mercadoria = repositorioMercadoria.getById(mercadoriaId);
 	    if (mercadoria != null) {
-	        repositorioMercadoria.delete(mercadoria);
+	        List<Usuario> usuarios = repositorioUsuario.findAll();
+	        for (Usuario usuario : usuarios) {
+	            if (usuario.getMercadorias().contains(mercadoria)) {
+	                usuario.getMercadorias().remove(mercadoria);
+	                repositorioUsuario.save(usuario);
+	            }
+	        }
+	        
+	        List<Venda> vendas = repositorioVenda.findAll();
+	        for (Venda venda : vendas) {
+	            if (venda.getMercadorias().contains(mercadoria)) {
+	                venda.getMercadorias().remove(mercadoria);
+	                repositorioVenda.save(venda);
+	            }
+	        }
+	        
+	        List<Empresa> empresas = repositorioEmpresa.findAll();
+	        for (Empresa empresa : empresas) {
+	            if (empresa.getMercadorias().contains(mercadoria)) {
+	                empresa.getMercadorias().remove(mercadoria);
+	                repositorioEmpresa.save(empresa);
+	            }
+	        }
+	        
+	        repositorioMercadoria.deleteById(mercadoriaId);
 	        status = HttpStatus.OK;
 	    }
 	    return new ResponseEntity<>(status);

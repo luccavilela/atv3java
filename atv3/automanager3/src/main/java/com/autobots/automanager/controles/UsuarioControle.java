@@ -16,11 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entidades.Empresa;
 import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.entidades.Veiculo;
+import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.modelos.atualizadores.UsuarioAtualizador;
 import com.autobots.automanager.modelos.links.AdicionadorLinkUsuario;
 import com.autobots.automanager.modelos.outros.UsuarioSelecionador;
 import com.autobots.automanager.repositorios.RepositorioEmpresa;
 import com.autobots.automanager.repositorios.UsuarioRepositorio;
+import com.autobots.automanager.repositorios.VeiculoRepositorio;
+import com.autobots.automanager.repositorios.VendaRepositorio;
 
 
 @RestController
@@ -30,6 +34,10 @@ public class UsuarioControle {
 	private UsuarioRepositorio repositorio;
 	@Autowired
 	private RepositorioEmpresa empresaRepositorio;
+	@Autowired
+	private VendaRepositorio repositorioVenda;
+	@Autowired
+	private VeiculoRepositorio repositorioVeiculo;
 	@Autowired
 	private UsuarioSelecionador selecionador;
 	@Autowired
@@ -90,17 +98,41 @@ public class UsuarioControle {
 
 	@DeleteMapping("/usuario/excluir")
 	public ResponseEntity<?> excluirUsuario(@RequestBody Usuario exclusao) {
-	    HttpStatus status = HttpStatus.BAD_REQUEST;
-	    Usuario usuario = repositorio.getById(exclusao.getId());
-	    if (usuario != null) {
-	        List<Empresa> empresas = empresaRepositorio.findByUsuariosId(usuario.getId());
-	        for (Empresa empresa : empresas) {
-	            empresa.getUsuarios().remove(usuario);
-	            empresaRepositorio.save(empresa);
-	        }
-	        repositorio.delete(usuario);
-	        status = HttpStatus.OK;
-	    }
-	    return new ResponseEntity<>(status);
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		Usuario usuario = repositorio.getById(exclusao.getId());
+		if (usuario != null) {
+			
+			List<Empresa> empresas = empresaRepositorio.findByUsuariosId(usuario.getId());
+			for (Empresa empresa : empresas) {
+				empresa.getUsuarios().remove(usuario);
+				empresaRepositorio.save(empresa);
+			}
+
+			
+			List<Venda> vendas = repositorioVenda.findAll();
+			for (Venda venda : vendas) {
+				if (venda.getCliente() != null && venda.getCliente().getId().equals(usuario.getId())) {
+					venda.setCliente(null);
+				}
+				if (venda.getFuncionario() != null && venda.getFuncionario().getId().equals(usuario.getId())) {
+					venda.setFuncionario(null);
+				}
+				repositorioVenda.save(venda);
+			}
+
+			
+			List<Veiculo> veiculos = repositorioVeiculo.findAll();
+			for (Veiculo veiculo : veiculos) {
+				if (veiculo.getProprietario() != null && veiculo.getProprietario().getId().equals(usuario.getId())) {
+					veiculo.setProprietario(null);
+				}
+				repositorioVeiculo.save(veiculo);
+			}
+
+	
+			repositorio.deleteById(exclusao.getId());
+			status = HttpStatus.OK;
+		}
+		return new ResponseEntity<>(status);
 	}
 }
