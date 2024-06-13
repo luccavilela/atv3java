@@ -17,9 +17,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autobots.automanager.entidades.Empresa;
+import com.autobots.automanager.entidades.Usuario;
+import com.autobots.automanager.entidades.Veiculo;
 import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.modelos.atualizadores.VendaAtualizador;
 import com.autobots.automanager.modelos.links.AdicionadorLinkVenda;
+import com.autobots.automanager.repositorios.RepositorioEmpresa;
+import com.autobots.automanager.repositorios.UsuarioRepositorio;
+import com.autobots.automanager.repositorios.VeiculoRepositorio;
 import com.autobots.automanager.repositorios.VendaRepositorio;
 
 
@@ -30,6 +36,15 @@ public class VendaControle {
 	
 	@Autowired 
 	private VendaRepositorio repositorioVenda;
+	
+	@Autowired
+	private UsuarioRepositorio repositorioUsuario;
+	
+	@Autowired
+	private VeiculoRepositorio repositorioVeiculo;
+	
+	@Autowired
+	private RepositorioEmpresa repositorioEmpresa;
 	
 	@Autowired
 	private AdicionadorLinkVenda adicionadorLink;
@@ -91,14 +106,37 @@ public class VendaControle {
     }
 	
 	@DeleteMapping("/excluir/{vendaId}")
-	public ResponseEntity<?> excluirMercadoria(@PathVariable Long vendaId) {
+	public ResponseEntity<?> excluirVenda(@PathVariable Long vendaId) {
 	    HttpStatus status = HttpStatus.BAD_REQUEST;
 	    Venda venda = repositorioVenda.getById(vendaId);
 	    if (venda != null) {
-	        repositorioVenda.delete(venda);
+	        List<Usuario> usuarios = repositorioUsuario.findAll();
+	        for (Usuario usuario : usuarios) {
+	            if (usuario.getVendas().contains(venda)) {
+	                usuario.getVendas().remove(venda);
+	                repositorioUsuario.save(usuario);
+	            }
+	        }
+	        
+	        List<Veiculo> veiculos = repositorioVeiculo.findAll();
+	        for (Veiculo veiculo : veiculos) {
+	            if (veiculo.getVendas().contains(venda)) {
+	                veiculo.getVendas().remove(venda);
+	                repositorioVeiculo.save(veiculo);
+	            }
+	        }
+	        
+	        List<Empresa> empresas = repositorioEmpresa.findAll();
+	        for (Empresa empresa : empresas) {
+	            if (empresa.getVendas().contains(venda)) {
+	                empresa.getVendas().remove(venda);
+	                repositorioEmpresa.save(empresa);
+	            }
+	        }
+	        
+	        repositorioVenda.deleteById(vendaId);
 	        status = HttpStatus.OK;
 	    }
 	    return new ResponseEntity<>(status);
 	}
-
 }
