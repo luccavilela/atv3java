@@ -12,12 +12,14 @@ import org.springframework.hateoas.RepresentationModel;
 
 import com.autobots.automanager.enumeracoes.TipoDocumento;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(callSuper = false)
 public class Documento extends RepresentationModel<Documento>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

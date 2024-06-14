@@ -10,12 +10,14 @@ import javax.persistence.Id;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(callSuper = false)
 public class Mercadoria extends RepresentationModel<Mercadoria>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

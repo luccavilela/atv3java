@@ -7,14 +7,14 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
 import com.autobots.automanager.controles.CredencialControle;
-import com.autobots.automanager.entidades.Credencial;
+import com.autobots.automanager.entidades.CredencialUsuarioSenha;
 
 @Component
-public class AdicionadorLinkCredencial implements AdicionadorLink<Credencial>{
+public class AdicionadorLinkCredencial implements AdicionadorLink<CredencialUsuarioSenha>{
 	
 	@Override
-	public void adicionarLink(List<Credencial> lista) {
-		for (Credencial credencial : lista) {
+	public void adicionarLink(List<CredencialUsuarioSenha> lista) {
+		for (CredencialUsuarioSenha credencial : lista) {
 			long id = credencial.getId();
 			Link linkProprio = WebMvcLinkBuilder
 					.linkTo(WebMvcLinkBuilder
@@ -26,7 +26,7 @@ public class AdicionadorLinkCredencial implements AdicionadorLink<Credencial>{
 	}
 
 	@Override
-	public void adicionarLink(Credencial objeto) {
+	public void adicionarLink(CredencialUsuarioSenha objeto) {
 		Link linkProprio = WebMvcLinkBuilder
 				.linkTo(WebMvcLinkBuilder
 						.methodOn(CredencialControle.class)
